@@ -2,9 +2,13 @@ import NavBar from "@/components/NavBar.component";
 import Link from "next/link";
 
 export default function Header() {
+  // supabase onStatusChange (later)
+  const isConnected = false;
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
+
         {/* Logo Section */}
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
@@ -18,12 +22,20 @@ export default function Header() {
         {/* Navigation Section */}
         <NavBar />
 
-        {/* Action Section (e.g., Connection Status or Auth) */}
+        {/* Action Section */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-medium border border-emerald-500/20">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Live Sync
+          {/* Status Indicator */}
+          <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${isConnected
+              ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" // Connected: Green (Emerald)
+              : "bg-red-500/10 text-red-500 border-red-500/20"           // Disconnected: Red
+            }`}>
+            <span className={`h-2 w-2 rounded-full transition-all ${isConnected
+                ? "bg-emerald-500 animate-pulse"
+                : "bg-red-500"
+              }`} />
+            {isConnected ? "Connected" : "Disconnected"}
           </div>
+
           <button className="text-sm font-medium bg-secondary px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors">
             Login
           </button>
