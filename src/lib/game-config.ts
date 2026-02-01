@@ -8,6 +8,7 @@ export interface GameConfig {
   color: string;
   gradient: string;
   instruction: string;
+  howToPlay: string;
 }
 
 export const GAMES: GameConfig[] = [
@@ -18,7 +19,8 @@ export const GAMES: GameConfig[] = [
     icon: Rows3, 
     color: "group-hover:text-blue-500", 
     gradient: "from-blue-500/20 to-blue-600/5", 
-    instruction: "Enter names and trace the path to find your destiny." 
+    instruction: "Enter names and trace the path to find your destiny.",
+    howToPlay: ""
   },
   { 
     id: "roulette", 
@@ -27,7 +29,8 @@ export const GAMES: GameConfig[] = [
     icon: Disc3, 
     color: "group-hover:text-red-500", 
     gradient: "from-red-500/20 to-red-600/5",
-    instruction: "Spin the wheel to decide your fate with custom options."
+    instruction: "Spin the wheel to decide your fate with custom options.",
+    howToPlay: ""
   },
   { 
     id: "vote", 
@@ -36,7 +39,8 @@ export const GAMES: GameConfig[] = [
     icon: Vote, 
     color: "group-hover:text-purple-500", 
     gradient: "from-purple-500/20 to-purple-600/5",
-    instruction: "Host anonymous polls and see real-time results."
+    instruction: "Host anonymous polls and see real-time results.",
+    howToPlay: ""
   },
   { 
     id: "bomb", 
@@ -45,6 +49,7 @@ export const GAMES: GameConfig[] = [
     icon: Bomb, 
     color: "group-hover:text-orange-500", 
     gradient: "from-orange-500/20 to-orange-600/5",
-    instruction: "Pass the bomb before the timer runs out! Tick tock..."
+    instruction: "Pass the bomb before the timer runs out! Tick tock...",
+    howToPlay: ""
   },
 ];
