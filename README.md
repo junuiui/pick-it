@@ -14,6 +14,7 @@
 - UI & Icons
   - `npx shadcn-ui@latest init`
   - `npm install lucide-react framer-motion clsx tailwind-merge`
+  - `npm i @flaticon/flaticon-uicons`
 
 - Backend & Real-time
   - `npm install @supabase/supabase-js`
