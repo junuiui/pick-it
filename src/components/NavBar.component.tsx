@@ -19,9 +19,9 @@ export default function NavBar() {
               duration: 0.2s
             */}
             <div className="flex items-center gap-2 transition-transform duration-200 group-hover:scale-110">
-              <Icon
-                size={18}
-                className={`transition-colors duration-200 group-hover:${game.color}`}
+              <Icon 
+                size={18} 
+                className={`transition-colors duration-200 ${game.color}`} 
               />
               <span className="hidden md:inline">{game.name}</span>
             </div>
