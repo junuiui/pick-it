@@ -9,3 +9,14 @@
 - Bomb Game: High-stakes synchronized timer game.
 
 ### Responsive UI/UX: Optimized for both mobile and desktop group settings.
+
+### Tech Stacks
+- UI & Icons
+  - `npx shadcn-ui@latest init`
+  - `npm install lucide-react framer-motion clsx tailwind-merge`
+
+- Backend & Real-time
+  - `npm install @supabase/supabase-js`
+
+- State Management (Client-side)
+  - `npm install zustand`
