@@ -22,10 +22,22 @@ export default function VoteRoomPage({ params }: { params: Promise<{ id: string 
   const [poll, setPoll] = useState<Poll | null>(null);
   const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(true);
-  const [votedOptionId, setVotedOptionId] = useState<string | null>(null);
+
+  // State for interaction
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    // Check local storage for previous vote
+    const localVote = localStorage.getItem(`vote_poll_${id}`);
+    if (localVote) {
+      setHasVoted(true);
+      setSelectedOptionId(localVote);
+    }
+
     fetchPollData();
 
     // Subscribe to realtime changes
@@ -82,38 +94,47 @@ export default function VoteRoomPage({ params }: { params: Promise<{ id: string 
     }
   };
 
-  const handleVote = async (optionId: string) => {
-    if (votedOptionId) return; // Prevent double voting locally
+  const handleSelectOption = (optionId: string) => {
+    if (hasVoted) return;
+    setSelectedOptionId(optionId);
+  };
+
+  const handleSubmitVote = async () => {
+    if (!selectedOptionId || hasVoted || isSubmitting) return;
+
+    setIsSubmitting(true);
 
     // Optimistic UI update
-    setVotedOptionId(optionId);
+    setHasVoted(true);
+    // Save to local storage
+    localStorage.setItem(`vote_poll_${id}`, selectedOptionId);
+
     setOptions((prev) =>
       prev.map((opt) =>
-        opt.id === optionId ? { ...opt, count: opt.count + 1 } : opt
+        opt.id === selectedOptionId ? { ...opt, count: opt.count + 1 } : opt
       )
     );
 
     try {
       const { error } = await supabase.rpc("increment_vote", {
-        option_id: optionId,
+        option_id: selectedOptionId,
       });
 
       if (error) {
-        // If RPC fails (e.g., function missing), try direct update (less safe for concurrency but works for simple demo)
-        // Ideally we use RPC for atomic increment. For now, fallback to simple update if RPC fails
-        // But for this demo, let's assume we might need to fallback or just rely on the user confirming setup.
-        // Actually, let's try a direct update first as it's easier without extra SQL setup from user
-        const option = options.find((o) => o.id === optionId);
+        // Fallback to direct update
+        const option = options.find((o) => o.id === selectedOptionId);
         if (option) {
           await supabase
             .from("options")
             .update({ count: option.count + 1 })
-            .eq("id", optionId);
+            .eq("id", selectedOptionId);
         }
       }
     } catch (error) {
       console.error("Error voting:", error);
       // Revert optimistic update if needed, but keeping simple for now
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -165,37 +186,38 @@ export default function VoteRoomPage({ params }: { params: Promise<{ id: string 
         <div className="space-y-4">
           {options.map((option) => {
             const percentage = totalVotes === 0 ? 0 : Math.round((option.count / totalVotes) * 100);
-            const isVoted = votedOptionId === option.id;
+            const isSelected = selectedOptionId === option.id;
 
             return (
               <motion.button
                 key={option.id}
-                onClick={() => handleVote(option.id)}
-                disabled={!!votedOptionId}
+                onClick={() => handleSelectOption(option.id)}
+                disabled={hasVoted || isSubmitting}
                 className={`relative w-full text-left p-4 rounded-xl border-2 transition-all overflow-hidden group
-                  ${votedOptionId
+                  ${hasVoted
                     ? "cursor-default border-transparent bg-secondary/20"
-                    : "hover:border-primary/50 hover:bg-secondary/10 border-border bg-card"
+                    : isSelected
+                      ? "border-green-500 bg-green-500/5 text-white"
+                      : "hover:border-primary/50 hover:bg-secondary/10 border-border bg-card"
                   }
-                  ${isVoted ? "ring-2 ring-primary ring-offset-2" : ""}
                 `}
-                whileTap={!votedOptionId ? { scale: 0.98 } : {}}
+                whileTap={!hasVoted ? { scale: 0.98 } : {}}
               >
                 {/* Progress Bar Background */}
-                {votedOptionId && (
+                {hasVoted && (
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${percentage}%` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className={`absolute top-0 left-0 h-full ${isVoted ? "bg-primary/20" : "bg-muted/40"}`}
+                    className={`absolute top-0 left-0 h-full ${isSelected ? "bg-primary/20" : "bg-muted/40"}`}
                   />
                 )}
 
                 <div className="relative flex justify-between items-center z-10">
-                  <span className={`font-semibold text-lg ${isVoted ? "text-primary" : ""}`}>
+                  <span className={`font-semibold text-lg ${isSelected && hasVoted ? "text-primary" : ""}`}>
                     {option.text}
                   </span>
-                  {votedOptionId && (
+                  {hasVoted && (
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium opacity-80">{option.count} votes</span>
                       <span className="text-sm font-bold w-12 text-right">{percentage}%</span>
@@ -207,9 +229,26 @@ export default function VoteRoomPage({ params }: { params: Promise<{ id: string 
           })}
         </div>
 
-        {votedOptionId && (
+        {/* Submit Button */}
+        {!hasVoted && (
+          <div className="pt-4 flex justify-center">
+            <button
+              onClick={handleSubmitVote}
+              disabled={!selectedOptionId || isSubmitting}
+              className="w-full sm:w-auto min-w-[200px] h-12 rounded-full border-2 font-bold text-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none transition-all shadow-lg hover:shadow-xl active:scale-95"
+            >
+              {isSubmitting ? (
+                <Loader2 className="animate-spin mx-auto" />
+              ) : (
+                "Submit Vote"
+              )}
+            </button>
+          </div>
+        )}
+
+        {hasVoted && (
           <div className="text-center text-sm text-muted-foreground animate-in fade-in pt-4">
-            Waiting for others to vote... Real-time updates active.
+            Thank you for voting! Check back for real-time results.
           </div>
         )}
 
