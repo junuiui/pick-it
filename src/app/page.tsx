@@ -4,7 +4,7 @@ import GameCard from "@/components/home/GameCard";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] space-y-12 py-10">
-      
+
       {/* Hero Section */}
       <div className="text-center space-y-4 max-w-2xl px-4">
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight">

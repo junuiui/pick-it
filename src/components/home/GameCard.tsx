@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GameConfig } from "@/lib/game-config";
-import { ArrowRight, MessageCircleQuestionMark  } from "lucide-react";
+import { ArrowRight, MessageCircleQuestionMark } from "lucide-react";
 
 interface GameCardProps {
   game: GameConfig;
@@ -30,10 +30,6 @@ export default function GameCard({ game }: GameCardProps) {
         <p className="mb-4 text-lg font-medium text-white translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
           {game.instruction}
         </p>
-        <span className="mb-4 **:inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md transition-transform duration-300 hover:bg-white/30 translate-y-4 group-hover:translate-y-0 delay-75">
-          How to play <MessageCircleQuestionMark  size={16} />
-        </span>
-
         <span className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md transition-transform duration-300 hover:bg-white/30 translate-y-4 group-hover:translate-y-0 delay-75">
           Play Now <ArrowRight size={16} />
         </span>
