@@ -1,35 +1,41 @@
 # Pick It
 
-A real-time multiplayer mini-game platform designed for groups to interact, vote, and play together on the fly.
+A real-time multiplayer mini-game platform designed for groups to interact, vote, and play together on the fly. Built with a focus on speed, simplicity, and premium aesthetics.
 
 ## Features
 
-- **Real-time Synchronization**: Powered by Supabase for instant updates across all clients.
-- **Dynamic Game Sessions**: Create and join game rooms instantly.
-- **Responsive Design**: Optimized for both mobile and desktop experiences.
+- **Real-time Synchronization**: Powered by Supabase Realtime for instant updates across all clients.
+- **Dynamic Game Sessions**: Create and join game rooms instantly via unique IDs.
+- **Persistent Rooms**: Game states are persisted in Supabase, allowing rooms to be rejoined.
+- **Premium UI/UX**: Modern design with glassmorphism, smooth animations, and responsive layouts.
 
 ## Games
 
-### Currently Available / In Progress
+### ✅ Available
 - **Vote**: A feature-rich voting game.
-  - Create custom polls associated with a room.
-  - Anonymous voting.
-  - Real-time result tracking.
-  - (In Progress) Host nicknames, advanced options.
+  - Create custom polls with multiple options.
+  - Host nicknames and anonymous voting.
+  - Real-time result tracking with animated progress bars.
+  - Automatic expiration logic.
+- **Ladder **: Classic random selection game.
+  - Support for multiple players and goals.
+  - Real-time synchronization of ladder results.
+  - Local play and persistent room modes.
+  - Smooth SVG-based path animations.
 
-### Planned / Upcoming
-- **Ladder**: Classic ladder climbing for fair random selection.
-- **Roulette**: Customizable spinning wheel.
-- **Bomb**: High-stakes timer game.
+### 🏗️ In Progress / Planned
+- **Roulette**: Customizable spinning wheel for quick decisions.
+- **Bomb**: High-stakes timer game with random triggers.
+- **Tournament**: Bracket-based selection system.
 
 ## Technical Stack
 
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router, React 19)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Backend & Realtime**: [Supabase](https://supabase.com/)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Backend & Realtime**: [Supabase](https://supabase.com/) (PostgreSQL + Realtime)
+- **State Management**: [Zustand](https://zustand.docs.pmnd.rs/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
 ## Getting Started
@@ -38,7 +44,7 @@ A real-time multiplayer mini-game platform designed for groups to interact, vote
 
 - Node.js (Latest LTS recommended)
 - npm or yarn
-- A Supabase project
+- A Supabase project with necessary tables
 
 ### Installation
 
@@ -67,15 +73,12 @@ A real-time multiplayer mini-game platform designed for groups to interact, vote
 
    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Current Status & Roadmap
+## Development Status & Roadmap
 
-- [x] Basic Project Setup (Next.js, Tailwind, Supabase)
-- [ ] **Vote Game**
-    - [x] Room Creation
-    - [x] Basic Voting UI
-    - [ ] Host Nicknames
-    - [ ] Anonymous Voting Options
-    - [ ] Expiration Logic
-- [ ] **Other Games** (Ladder, Roulette, Bomb) implementation
-- [ ] User Presence & Connection Handling
-- [ ] Polish UI/UX & Animations
+- [x] **Platform Core**: Next.js 15, Tailwind 4, Supabase Integration
+- [x] **Vote Game**: Full implementation (Rooms, Voting, Nicknames, Expiration)
+- [x] **Ladder Game**: Full implementation (Path generation, Real-time sync, Persistence)
+- [ ] **Roulette**: UI Design and Logic implementation
+- [ ] **Bomb Game**: Interaction design and Real-time syncing
+- [ ] **User Presence**: Visual indicator of who is currently in the room
+- [ ] **Global UI Polish**: Consistent glassmorphism and micro-animations across all pages
