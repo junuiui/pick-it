@@ -2,28 +2,16 @@
 
 import NavBar from "@/components/NavBar.component";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
+import { useAppStore } from "@/lib/stores/useAppStore";
 
 export default function Header() {
-  const [isConnected, setIsConnected] = useState(false);
+  const { isConnected, initializeConnection } = useAppStore();
 
-  // Check if connected to Supabase
   useEffect(() => {
-    const channel = supabase.channel("health");
-
-    channel.subscribe((status) => {
-      if (status === "SUBSCRIBED") {
-        setIsConnected(true);
-      } else if (status === "CLOSED" || status === "CHANNEL_ERROR") {
-        setIsConnected(false);
-      }
-    });
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+    const cleanup = initializeConnection();
+    return cleanup;
+  }, [initializeConnection]);
 
   return (
     // Header component
@@ -56,10 +44,6 @@ export default function Header() {
               }`} />
             {isConnected ? "Connected" : "Disconnected"}
           </div>
-
-          <button className="text-sm font-medium bg-secondary px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors">
-            Login
-          </button>
         </div>
       </div>
     </header>
